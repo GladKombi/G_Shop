@@ -98,12 +98,24 @@ require_once('../models/select/select-Command.php');
                                             </div>
                                             <div class="form-group col-xl-6 col-lg-6 col-md-6  col-sm-6 p-3">
                                                 <label for="feedback1" class="sr-only">Quantity <span class="text-danger">*</span></label>
-                                                <input type="number" autocomplete="off" id="feedback1" class="form-control" placeholder="E.g: 100" name="quantite">
+                                                <input type="number" autocomplete="off" min="1" id="feedback1" class="form-control" placeholder="E.g: 100" name="quantite">
                                             </div>
-
                                             <div class="form-actions d-flex justify-content-end">
-                                                <a href="command.php"><button type="reset" class="btn btn-danger me-1">new Command</button></a>
-                                                <button type="submit" class="btn btn-primary " name="save"><?= $btn ?></button>
+                                            <?php
+                                               if ($stockResta>0){
+                                                # Affichage du stock qui ne pas encore attribue
+                                                ?>
+                                                    <button class="btn btn-info me-1"><b>La quantité non attribuer pour cette command est <em><?= $stockResta ?></em></b></button>
+                                                    <button type="submit" class="btn btn-primary " name="save"><?= $btn ?></button>
+                                                <?php
+                                               } else{
+                                                # Quand il tout le stock viens d'etre attribuer
+                                                ?>
+                                                    <a href="command.php?newCommand" class="btn btn-danger me-1">new Command</a>
+                                                <?php
+                                            }
+                                            ?>
+
                                             </div>
                                         </div>
                                     </form>
@@ -128,29 +140,13 @@ require_once('../models/select/select-Command.php');
             }
             ?>
 
-
             <div class="page-heading">
-                <div class="page-title">
-                    <div class="row">
-                        <div class="col-12 col-md-6 order-md-1 order-last">
-                            <h3>DataTable</h3>
-                            <p class="text-subtitle text-muted">A sortable, searchable, paginated table without dependencies thanks to simple-datatables.</p>
-                        </div>
-                        <div class="col-12 col-md-6 order-md-2 order-first">
-                            <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">DataTable</li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
+
                 <section class="section">
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title">
-                                Simple Datatable
+                                Liste of commands
                             </h5>
                         </div>
                         <div class="card-body">

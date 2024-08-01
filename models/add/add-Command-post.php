@@ -1,5 +1,8 @@
 <?php
-include_once '../../connexion/connexion.php'; // Appel de la connexion
+// Appel de la connexion
+include_once '../../connexion/connexion.php';
+// Appel de la fonction qui permet de recuperer la photo
+require_once('../../fonctions/fonctions.php');
 // Enregistrement de la commande
 if (isset($_POST['valider'])) {
     $date = date('Y-m-d');
@@ -14,25 +17,24 @@ if (isset($_POST['valider'])) {
     $statut = 0;
     // requette permettant d'inserer une commande dans la base des données
     $req = $connexion->prepare("INSERT INTO `command`(`date`, `description`, `quantite`, `prix`, `photo`, `statut`) VALUES (?,?,?,?,?,?)");
-    $resultat = $req->execute(array($date, $Description, $Quantite, $prix, $photo, $statut));
+    $resultat = $req->execute(array($date, $Description, $Quantite, $prix, $newimage, $statut));
     $id = $connexion->lastInsertId();
     if ($resultat == true) {
-        $_SESSION['msg'] = " Votre commande viens d'être enregistrer avec succes";
-        header("location:../../views/commande.php?idcom=$id");
+        $_SESSION['msg'] = " Votre commande viens d'être enregistrer avec succes !";
+        header("location:../../views/command.php?idcom=$id");
     }
 } elseif (isset($_POST['save'])) { //Ajout au participant
-    $id = $_GET['idCom'];
+    $id = $_GET['idcom'];
     $user = htmlspecialchars($_POST['user']);
     $Quantite = htmlspecialchars($_POST['quantite']);
-    /**
-     * Cette requette retourne la quantité total de a command
-     */
-    $getQuantity = $connexion->prepare("SELECT quantite FROM `command` WHERE id=?"); //Recuperation de la quantité et du prix
+
+    //Recuperation de la quantité totale de la commande
+    $getQuantity = $connexion->prepare("SELECT quantite FROM `command` WHERE id=?");
     $getQuantity->execute(array($id));
     if ($tab = $getQuantity->fetch()) {
-        $QuantiteEnre = $tab['quantite'];       
+        $commandQuant = $tab['quantite'];
     } else {
-        $QuantiteEnre = 0;
+        $commandQuant = 0;
     }
     /**
      * Cette requette retourne la quantité déjà attribuer
@@ -40,24 +42,28 @@ if (isset($_POST['valider'])) {
     $requete = $connexion->prepare("SELECT SUM(quantite) as stock FROM participants WHERE commad=?");
     $requete->execute(array($id));
     if ($table = $requete->fetch()) {
-        $stockVendu = $table['stock'];
+        $stockAttri = $table['stock'];
+       
     } else {
-        $stockVendu = 0;
+        $stockAttri = 0;
     }
-    $stockResta = $QuantiteEnre - $stockVendu;
-    //Ici on verifie si quantité qu'on a besion de commandée est supperieur à ce qui est en stok                  
+    $stockResta = $commandQuant - $stockAttri;
+    echo $stockAttri;
+    echo $stockResta;
+    //Ici on verifie si quantité qu'on veux attribuer n'est pas supperieur à celle de la commande                  
     if ($Quantite > $stockResta) {
-        $_SESSION['msge'] = "Please enter a valid quantity !";
+        $_SESSION['msg'] = "Please enter a valid quantity !";
         header("location:../../views/command.php?idcom=$id");
     } else {
-        $req = $connexion->prepare("INSERT INTO `participants`(`user`, `commad`, `quantite`, `statut`) VALUES (?,?,?,?,?)");
+        $statut=0;
+        $req = $connexion->prepare("INSERT INTO `participants`(`user`, `commad`, `quantite`, `statut`)  VALUES (?,?,?,?)");
         $req->execute(array($user, $id, $Quantite, $statut));
         if ($req) {
-            $_SESSION['msge'] = "A new addition to the order has just been made !";
+            $_SESSION['msg'] = "A new addition to the order has just been made !";
             // if (isset($_GET['idpartic'])) {
             //     header("location:../../views/command.php?idcom=$id&idpartic=0");
             // } else {
-                header("location:../../views/command.php?idcom=$id");
+            header("location:../../views/command.php?idcom=$id");
             // }
         }
     }
