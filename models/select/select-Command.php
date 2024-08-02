@@ -16,10 +16,10 @@ if (isset($_GET['idCommand'])) {
     $btn = "Save";
     $title = "Add a to the command";
     #La selection du user
-    $statut=0;
-    $etat=0;
+    $statut = 0;
+    $etat = 0;
     $getUser = $connexion->prepare("SELECT * FROM `user` WHERE statut=? and etat=?");
-    $getUser->execute([$statut,$etat]);
+    $getUser->execute([$statut, $etat]);
     #Recuperation de la quantité totale de la commande
     $getQuantity = $connexion->prepare("SELECT quantite FROM `command` WHERE id=?");
     $getQuantity->execute(array($id));
@@ -38,6 +38,9 @@ if (isset($_GET['idCommand'])) {
     }
     #Calucul de la quantite non attribuer 
     $stockResta = $commandQte - $stockAttri;
+    # Affichage des participants
+    $getParticipant = $connexion->prepare("SELECT `participants`.*, user.nom, user.postnom, user.prenom FROM `participants`,user WHERE participants.commad=?;");
+    $getParticipant->execute([$id]);
 } else {
 
     #Ici je specifie le lien lors qu'il s'agit de l'enregistrement
@@ -45,6 +48,11 @@ if (isset($_GET['idCommand'])) {
     $btn = "Save";
     $title = "Add a new Command";
 }
-
-$getData = $connexion->prepare("SELECT * FROM `command`");
+#Recuperation de la Description de la commande
+$getDescription = $connexion->prepare("SELECT `description` FROM `command` WHERE id=?");
+$getDescription->execute(array($id));
+if ($Des = $getDescription->fetch()) {
+    $Descrption = $Des['description'];
+}
+$getData = $connexion->prepare("SELECT `command`.*, user.nom,user.prenom FROM `command`,user,participants WHERE participants.commad=command.id and participants.user=user.id ORDER BY command.id DESC;");
 $getData->execute();

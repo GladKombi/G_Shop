@@ -101,20 +101,20 @@ require_once('../models/select/select-Command.php');
                                                 <input type="number" autocomplete="off" min="1" id="feedback1" class="form-control" placeholder="E.g: 100" name="quantite">
                                             </div>
                                             <div class="form-actions d-flex justify-content-end">
-                                            <?php
-                                               if ($stockResta>0){
-                                                # Affichage du stock qui ne pas encore attribue
+                                                <?php
+                                                if ($stockResta > 0) {
+                                                    # Affichage du stock qui ne pas encore attribue
                                                 ?>
                                                     <button class="btn btn-info me-1"><b>La quantité non attribuer pour cette command est <em><?= $stockResta ?></em></b></button>
                                                     <button type="submit" class="btn btn-primary " name="save"><?= $btn ?></button>
                                                 <?php
-                                               } else{
-                                                # Quand il tout le stock viens d'etre attribuer
+                                                } else {
+                                                    # Quand il tout le stock viens d'etre attribuer
                                                 ?>
                                                     <a href="command.php?newCommand" class="btn btn-danger me-1">new Command</a>
                                                 <?php
-                                            }
-                                            ?>
+                                                }
+                                                ?>
 
                                             </div>
                                         </div>
@@ -139,45 +139,115 @@ require_once('../models/select/select-Command.php');
             <?php
             }
             ?>
-
-            <div class="page-heading">
-
-                <section class="section">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">
-                                Liste of commands
-                            </h5>
+            <!-- the tables wich shoes the oders and the details -->
+            <?php
+            if (isset($_GET['idcom'])) {
+               
+            ?>
+                <div class="page-heading">
+                    <section class="section">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">
+                                    Deetails of the Command <?=$Descrption;?>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-hover" id="table1">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>                                            
+                                            <th>Description</th>
+                                            <th>Quantity</th>                                            
+                                            <th>Users</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $n = 0;
+                                        while ($idParti = $getParticipant->fetch()) {
+                                            $n++;
+                                        ?>
+                                            <tr>
+                                                <th scope="row"><?= $n; ?></th>                                                
+                                                <td><?= $Descrption?></td>
+                                                <td><?= $idParti["quantite"] ?></td>                                                
+                                                <td> <?= $idParti["prenom"] . " " . $idParti["nom"] ?></td>                                                
+                                                <td>
+                                                    <a href='user.php?idParti=<?= $idParti['id'] ?>' class="btn btn-primary btn-sm "><i class="bi bi-pencil-square"></i></a>
+                                                    <a onclick=" return confirm('Voulez-vous vraiment supprimer ?')" href='../models/delete/del-user-post.php?idSupcat=<?= $idParti['id'] ?>' class="btn btn-danger btn-sm "><i class="bi bi-trash3-fill"></i></a>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <table class="table table-hover" id="table1">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>City</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Graiden</td>
-                                        <td>vehicula.aliquet@semconsequat.co.uk</td>
-                                        <td>076 4820 8838</td>
-                                        <td>Offenburg</td>
-                                        <td>
-                                            <span class="badge bg-success">Active</span>
-                                        </td>
-                                    </tr>
 
-                                </tbody>
-                            </table>
+                    </section>
+                </div>
+            <?php
+            } else {
+            ?>
+                <div class="page-heading">
+                    <section class="section">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">
+                                    Liste of commands
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-hover" id="table1">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th>Quantity</th>
+                                            <th>Price</th>
+                                            <th>Photo</th>
+                                            <th>Users</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $n = 0;
+                                        while ($iduser = $getData->fetch()) {
+                                            $n++;
+                                        ?>
+                                            <tr>
+                                                <th scope="row"><?= $n; ?></th>
+                                                <td><?= $iduser["date"] ?></td>
+                                                <td><?= $iduser["description"] ?></td>
+                                                <td><?= $iduser["quantite"] ?></td>
+                                                <td><?= $iduser["prix"] ?> $</td>                                                
+                                                <td> <img src="../assets/profil/<?= $iduser["photo"] ?>" width='50' height="50" style="object-fit: cover;"></td>
+                                                <td><?= $iduser["prenom"] . " " . $iduser["nom"] ?></td>
+                                                <td>
+                                                    <a href='user.php?iduser=<?= $iduser['id'] ?>' class="btn btn-primary btn-sm "><i class="bi bi-pencil-square"></i></a>
+                                                    <a onclick=" return confirm('Voulez-vous vraiment supprimer ?')" href='../models/delete/del-user-post.php?idSupcat=<?= $iduser['id'] ?>' class="btn btn-danger btn-sm "><i class="bi bi-trash3-fill"></i></a>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
 
-                </section>
-            </div>
+                    </section>
+                </div>
+            <?php
+            }
+
+            ?>
+
 
             <footer>
                 <div class="footer clearfix mb-0 text-muted">

@@ -27,7 +27,6 @@ if (isset($_POST['valider'])) {
     $id = $_GET['idcom'];
     $user = htmlspecialchars($_POST['user']);
     $Quantite = htmlspecialchars($_POST['quantite']);
-
     //Recuperation de la quantité totale de la commande
     $getQuantity = $connexion->prepare("SELECT quantite FROM `command` WHERE id=?");
     $getQuantity->execute(array($id));
@@ -42,8 +41,7 @@ if (isset($_POST['valider'])) {
     $requete = $connexion->prepare("SELECT SUM(quantite) as stock FROM participants WHERE commad=?");
     $requete->execute(array($id));
     if ($table = $requete->fetch()) {
-        $stockAttri = $table['stock'];
-       
+        $stockAttri = $table['stock'];  
     } else {
         $stockAttri = 0;
     }
@@ -60,11 +58,7 @@ if (isset($_POST['valider'])) {
         $req->execute(array($user, $id, $Quantite, $statut));
         if ($req) {
             $_SESSION['msg'] = "A new addition to the order has just been made !";
-            // if (isset($_GET['idpartic'])) {
-            //     header("location:../../views/command.php?idcom=$id&idpartic=0");
-            // } else {
             header("location:../../views/command.php?idcom=$id");
-            // }
         }
     }
 } else {
