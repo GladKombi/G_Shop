@@ -10,8 +10,9 @@ if (isset($_GET['idCommand'])) {
     $btn = "Modify";
     $title = "Modify a command";
 } elseif (isset($_GET['idcom'])) {
+    $id = $_GET['idcom'];
     #Ici je specifie le lien lors de l'enregistrement des participants à la commande
-    $url = "../models/add/add-Command-post.php?idCom";
+    $url = "../models/add/add-Command-post.php?idcom=$id";
     $btn = "Save";
     $title = "Add a to the command";
     #La selection du user
@@ -19,6 +20,24 @@ if (isset($_GET['idCommand'])) {
     $etat=0;
     $getUser = $connexion->prepare("SELECT * FROM `user` WHERE statut=? and etat=?");
     $getUser->execute([$statut,$etat]);
+    #Recuperation de la quantité totale de la commande
+    $getQuantity = $connexion->prepare("SELECT quantite FROM `command` WHERE id=?");
+    $getQuantity->execute(array($id));
+    if ($tab = $getQuantity->fetch()) {
+        $commandQte = $tab['quantite'];
+    } else {
+        $commandQte = 0;
+    }
+    #Selection de la quantité déjà Attribueé
+    $getQuantity = $connexion->prepare("SELECT SUM(quantite) as stock FROM participants WHERE commad=?");
+    $getQuantity->execute(array($id));
+    if ($table = $getQuantity->fetch()) {
+        $stockAttri = $table['stock'];
+    } else {
+        $stockAttri = 0;
+    }
+    #Calucul de la quantite non attribuer 
+    $stockResta = $commandQte - $stockAttri;
 } else {
 
     #Ici je specifie le lien lors qu'il s'agit de l'enregistrement
