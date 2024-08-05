@@ -149,10 +149,10 @@ require_once('../models/select/select-Command.php');
                         <div class="card">
                             <div class="card-header">
                                 <h5 class="card-title">
-                                    Deetails of the Command <?=$Descrption;?>
+                                    Dee tails of the Command <?=$Descrption?>
                                 </h5>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body table-responsive">
                                 <table class="table table-hover" id="table1">
                                     <thead>
                                         <tr>
@@ -186,7 +186,6 @@ require_once('../models/select/select-Command.php');
                                 </table>
                             </div>
                         </div>
-
                     </section>
                 </div>
             <?php
@@ -200,7 +199,7 @@ require_once('../models/select/select-Command.php');
                                     Liste of commands
                                 </h5>
                             </div>
-                            <div class="card-body">
+                            <div class="table-responsive card-body">
                                 <table class="table table-hover" id="table1">
                                     <thead>
                                         <tr>
@@ -245,10 +244,7 @@ require_once('../models/select/select-Command.php');
                 </div>
             <?php
             }
-
             ?>
-
-
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
                     <div class="float-start">
