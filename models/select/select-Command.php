@@ -38,6 +38,12 @@ if (isset($_GET['idCommand'])) {
     }
     #Calucul de la quantite non attribuer 
     $stockResta = $commandQte - $stockAttri;
+    #Recuperation de la Description de la commande
+    $getDescription = $connexion->prepare("SELECT `description` FROM `command` WHERE id=?;");
+    $getDescription->execute([$id]);
+    if ($Des = $getDescription->fetch()) {
+        $Descrption = $Des['description'];
+    }
     # Affichage des participants
     $getParticipant = $connexion->prepare("SELECT `participants`.*, user.nom, user.postnom, user.prenom FROM `participants`,user WHERE participants.commad=?;");
     $getParticipant->execute([$id]);
@@ -48,11 +54,7 @@ if (isset($_GET['idCommand'])) {
     $btn = "Save";
     $title = "Add a new Command";
 }
-#Recuperation de la Description de la commande
-$getDescription = $connexion->prepare("SELECT `description` FROM `command` WHERE id=?");
-$getDescription->execute(array($id));
-if ($Des = $getDescription->fetch()) {
-    $Descrption = $Des['description'];
-}
-$getData = $connexion->prepare("SELECT `command`.*, user.nom,user.prenom FROM `command`,user,participants WHERE participants.commad=command.id and participants.user=user.id ORDER BY command.id DESC;");
+
+# Selection de la commande et ses participant
+$getData = $connexion->prepare("SELECT `command`.*, user.nom,user.prenom FROM `command`,user,participants WHERE participants.commad=command.id and participants.user=user.id GROUP BY participants.commad ORDER BY command.id DESC;");
 $getData->execute();
