@@ -30,7 +30,6 @@ if (isset($_POST['valider'])) {
     $id = $_GET['idcom'];
     $user = htmlspecialchars($_POST['user']);
     $Quantite = htmlspecialchars($_POST['quantite']);
-
     //Recuperation de la quantité totale de la commande
     $getQuantity = $connexion->prepare("SELECT quantite FROM `command` WHERE id=?");
     $getQuantity->execute(array($id));
@@ -62,11 +61,7 @@ if (isset($_POST['valider'])) {
         $req->execute(array($user, $id, $Quantite, $statut));
         if ($req) {
             $_SESSION['msg'] = "A new addition to the order has just been made !";
-            // if (isset($_GET['idpartic'])) {
-            //     header("location:../../views/command.php?idcom=$id&idpartic=0");
-            // } else {
             header("location:../../views/command.php?idcom=$id");
-            // }
         }
     }
 } else {
