@@ -41,7 +41,6 @@ if (isset($_GET['idCommand'])) {
     # The selection of command details
     $getDetails = $connexion->prepare("SELECT command.date, command.description, command.quantite as QuantiteTot, command.photo, user.nom, user.prenom, participants.* FROM `command`,user,participants WHERE participants.commad=command.id AND participants.user=user.id AND command.id=?;");
     $getDetails->execute([$id]);
-
 } else {
 
     #Ici je specifie le lien lors qu'il s'agit de l'enregistrement
@@ -50,6 +49,5 @@ if (isset($_GET['idCommand'])) {
     $title = "Add a new Command";
 }
 
-# Selection de la commande et ses participant
-$getData = $connexion->prepare("SELECT `command`.*, user.nom,user.prenom FROM `command`,user,participants WHERE participants.commad=command.id and participants.user=user.id GROUP BY participants.commad ORDER BY command.id DESC;");
+$getData = $connexion->prepare("SELECT * FROM `command`");
 $getData->execute();

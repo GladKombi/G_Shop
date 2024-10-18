@@ -139,54 +139,16 @@ require_once('../models/select/select-Command.php');
             <?php
             }
             ?>
-            <!-- the tables wich shoes the oders and the details -->
-            <?php
-            if (isset($_GET['idcom'])) {
-               
-            ?>
-                <div class="page-heading">
-                    <section class="section">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">
-                                    Dee tails of the Command <?=$Descrption?>
-                                </h5>
-                            </div>
-                            <div class="card-body table-responsive">
-                                <table class="table table-hover" id="table1">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>                                            
-                                            <th>Description</th>
-                                            <th>Quantity</th>                                            
-                                            <th>Users</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $n = 0;
-                                        while ($idParti = $getParticipant->fetch()) {
-                                            $n++;
-                                        ?>
-                                            <tr>
-                                                <th scope="row"><?= $n; ?></th>                                                
-                                                <td><?= $Descrption?></td>
-                                                <td><?= $idParti["quantite"] ?></td>                                                
-                                                <td> <?= $idParti["prenom"] . " " . $idParti["nom"] ?></td>                                                
-                                                <td>
-                                                    <a href='user.php?idParti=<?= $idParti['id'] ?>' class="btn btn-primary btn-sm "><i class="bi bi-pencil-square"></i></a>
-                                                    <a onclick=" return confirm('Voulez-vous vraiment supprimer ?')" href='../models/delete/del-user-post.php?idSupcat=<?= $idParti['id'] ?>' class="btn btn-danger btn-sm "><i class="bi bi-trash3-fill"></i></a>
-                                                </td>
-                                            </tr>
-                                        <?php
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
+
+            <div class="page-heading">
+
+                <section class="section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                Liste of commands
+                            </h5>
                         </div>
-                      
                         <div class="card-body">
                             <table class="table table-hover" id="table1">
                                 <?php
@@ -225,23 +187,19 @@ require_once('../models/select/select-Command.php');
                                 <?php
                                 } else {
                                 ?>
-
                                     <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>Date</th>
                                             <th>Description</th>
                                             <th>Quantity</th>
-
                                             <th>Photo</th>
                                             <th>Actions</th>
-
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                         $n = 0;
-
                                         while ($Command = $getData->fetch()) {
                                             $n++;
                                         ?>
@@ -253,27 +211,23 @@ require_once('../models/select/select-Command.php');
                                                 <td><img src="../assets/photo/<?= $Command["photo"] ?>" width='50' height="50" style="object-fit: cover;"></td>
                                                 <td>
                                                     <a href="Command-Details.php?ViewCommand=<?= $Command['id'] ?>" class="btn btn-primary btn-sm "><i class="bi bi-eye"></i></a>
-
                                                 </td>
                                             </tr>
                                         <?php
                                         }
                                         ?>
                                     </tbody>
-
                                 <?php
                                 }
 
                                 ?>
                             </table>
-
                         </div>
+                    </div>
 
-                    </section>
-                </div>
-            <?php
-            }
-            ?>
+                </section>
+            </div>
+
             <footer>
                 <div class="footer clearfix mb-0 text-muted">
                     <div class="float-start">
