@@ -9,13 +9,16 @@ if (isset($_POST['valider'])) {
     $Description = htmlspecialchars($_POST['description']);
     $Quantite = htmlspecialchars($_POST['quantite']);
     $prix = htmlspecialchars($_POST['prix']);
-    $image = $_FILES['picture']['name'];
-    $file = $_FILES['picture'];
-    $destination = "../../assets/photo/" . basename($image);
+    // $image = $_FILES['picture']['name'];
+    // $file = $_FILES['picture'];
+    $fichier_tmp = $_FILES['picture']['tmp_name'];
+    $nom_original = $_FILES['picture']['name'];
+    $destination = "../../assets/photo/";
     // fonction permettant de recuperer la photo
-    $newimage = RecuperPhoto($image, $file, $destination);
+    $newimage = RecuperPhoto($fichier_tmp, $nom_original, $destination);
     $statut = 0;
-    // requette permettant d'inserer une commande dans la base des données
+    // echo $newimage ;
+    //requette permettant d'inserer une commande dans la base des données
     $req = $connexion->prepare("INSERT INTO `command`(`date`, `description`, `quantite`, `prix`, `photo`, `statut`) VALUES (?,?,?,?,?,?)");
     $resultat = $req->execute(array($date, $Description, $Quantite, $prix, $newimage, $statut));
     $id = $connexion->lastInsertId();
@@ -41,7 +44,7 @@ if (isset($_POST['valider'])) {
     $requete = $connexion->prepare("SELECT SUM(quantite) as stock FROM participants WHERE commad=?");
     $requete->execute(array($id));
     if ($table = $requete->fetch()) {
-        $stockAttri = $table['stock'];  
+        $stockAttri = $table['stock'];
     } else {
         $stockAttri = 0;
     }
@@ -53,7 +56,7 @@ if (isset($_POST['valider'])) {
         $_SESSION['msg'] = "Please enter a valid quantity !";
         header("location:../../views/command.php?idcom=$id");
     } else {
-        $statut=0;
+        $statut = 0;
         $req = $connexion->prepare("INSERT INTO `participants`(`user`, `commad`, `quantite`, `statut`)  VALUES (?,?,?,?)");
         $req->execute(array($user, $id, $Quantite, $statut));
         if ($req) {

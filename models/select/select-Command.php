@@ -38,15 +38,10 @@ if (isset($_GET['idCommand'])) {
     }
     #Calucul de la quantite non attribuer 
     $stockResta = $commandQte - $stockAttri;
-    #Recuperation de la Description de la commande
-    $getDescription = $connexion->prepare("SELECT `description` FROM `command` WHERE id=?;");
-    $getDescription->execute([$id]);
-    if ($Des = $getDescription->fetch()) {
-        $Descrption = $Des['description'];
-    }
-    # Affichage des participants
-    $getParticipant = $connexion->prepare("SELECT `participants`.*, user.nom, user.postnom, user.prenom FROM `participants`,user WHERE participants.commad=?;");
-    $getParticipant->execute([$id]);
+    # The selection of command details
+    $getDetails = $connexion->prepare("SELECT command.date, command.description, command.quantite as QuantiteTot, command.photo, user.nom, user.prenom, participants.* FROM `command`,user,participants WHERE participants.commad=command.id AND participants.user=user.id AND command.id=?;");
+    $getDetails->execute([$id]);
+
 } else {
 
     #Ici je specifie le lien lors qu'il s'agit de l'enregistrement

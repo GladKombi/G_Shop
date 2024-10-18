@@ -13,12 +13,7 @@
 <script src="../assets/static/js/pages/datatables.js"></script>
 <!-- Sweet Alert JS -->
 <script src="../assets/static/js/components/dark.js"></script>
-    <script src="../assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    
-    
-    <script src="../assets/compiled/js/app.js"></script>
-    
+<script src="../assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 
-    
 <script src="../assets/extensions/sweetalert2/sweetalert2.min.js"></script>>
-<script src="../assets/static/js/pages/sweetalert2.js"></script>>
+<script src="../assets/static/js/pages/sweetalert2.js"></script>

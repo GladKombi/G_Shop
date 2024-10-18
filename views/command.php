@@ -186,58 +186,87 @@ require_once('../models/select/select-Command.php');
                                 </table>
                             </div>
                         </div>
-                    </section>
-                </div>
-            <?php
-            } else {
-            ?>
-                <div class="page-heading">
-                    <section class="section">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">
-                                    Liste of commands
-                                </h5>
-                            </div>
-                            <div class="table-responsive card-body">
-                                <table class="table table-hover" id="table1">
+                      
+                        <div class="card-body">
+                            <table class="table table-hover" id="table1">
+                                <?php
+                                if (isset($_GET['idcom'])) {
+                                ?>
                                     <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>Date</th>
                                             <th>Description</th>
+                                            <th>Participants</th>
                                             <th>Quantity</th>
-                                            <th>Price</th>
-                                            <th>Photo</th>
-                                            <th>Users</th>
-                                            <th>Action</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
                                         $n = 0;
-                                        while ($iduser = $getData->fetch()) {
+                                        while ($Details = $getDetails->fetch()) {
                                             $n++;
                                         ?>
                                             <tr>
-                                                <th scope="row"><?= $n; ?></th>
-                                                <td><?= $iduser["date"] ?></td>
-                                                <td><?= $iduser["description"] ?></td>
-                                                <td><?= $iduser["quantite"] ?></td>
-                                                <td><?= $iduser["prix"] ?> $</td>                                                
-                                                <td> <img src="../assets/profil/<?= $iduser["photo"] ?>" width='50' height="50" style="object-fit: cover;"></td>
-                                                <td><?= $iduser["prenom"] . " " . $iduser["nom"] ?></td>
+                                                <td><?= $n ?></td>
+                                                <td><?= $Details["date"] ?></td>
+                                                <td><?= $Details["description"] ?></td>
+                                                <td><?= $Details["nom"] . " " . $Details["prenom"] ?></td>
+                                                <td><?= $Details["quantite"] ?> Pcs</td>
                                                 <td>
-                                                    <a href='user.php?iduser=<?= $iduser['id'] ?>' class="btn btn-primary btn-sm "><i class="bi bi-pencil-square"></i></a>
-                                                    <a onclick=" return confirm('Voulez-vous vraiment supprimer ?')" href='../models/delete/del-user-post.php?idSupcat=<?= $iduser['id'] ?>' class="btn btn-danger btn-sm "><i class="bi bi-trash3-fill"></i></a>
+                                                    <a href="command.php?idCommand=<?= $Details['id'] ?>" class="btn btn-primary btn-sm "><i class="bi bi-pencil-square"></i></a>
                                                 </td>
                                             </tr>
                                         <?php
                                         }
                                         ?>
                                     </tbody>
-                                </table>
-                            </div>
+                                <?php
+                                } else {
+                                ?>
+
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th>Quantity</th>
+
+                                            <th>Photo</th>
+                                            <th>Actions</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $n = 0;
+
+                                        while ($Command = $getData->fetch()) {
+                                            $n++;
+                                        ?>
+                                            <tr>
+                                                <td><?= $n ?></td>
+                                                <td><?= $Command["date"] ?></td>
+                                                <td><?= $Command["description"] ?></td>
+                                                <td><?= $Command["quantite"] ?> Pcs</td>
+                                                <td><img src="../assets/photo/<?= $Command["photo"] ?>" width='50' height="50" style="object-fit: cover;"></td>
+                                                <td>
+                                                    <a href="Command-Details.php?ViewCommand=<?= $Command['id'] ?>" class="btn btn-primary btn-sm "><i class="bi bi-eye"></i></a>
+
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        }
+                                        ?>
+                                    </tbody>
+
+                                <?php
+                                }
+
+                                ?>
+                            </table>
+
                         </div>
 
                     </section>
