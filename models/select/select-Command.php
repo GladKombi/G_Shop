@@ -16,10 +16,10 @@ if (isset($_GET['idCommand'])) {
     $btn = "Save";
     $title = "Add a to the command";
     #La selection du user
-    $statut=0;
-    $etat=0;
+    $statut = 0;
+    $etat = 0;
     $getUser = $connexion->prepare("SELECT * FROM `user` WHERE statut=? and etat=?");
-    $getUser->execute([$statut,$etat]);
+    $getUser->execute([$statut, $etat]);
     #Recuperation de la quantité totale de la commande
     $getQuantity = $connexion->prepare("SELECT quantite FROM `command` WHERE id=?");
     $getQuantity->execute(array($id));
@@ -38,6 +38,9 @@ if (isset($_GET['idCommand'])) {
     }
     #Calucul de la quantite non attribuer 
     $stockResta = $commandQte - $stockAttri;
+    # The selection of command details
+    $getDetails = $connexion->prepare("SELECT command.date, command.description, command.quantite as QuantiteTot, command.photo, user.nom, user.prenom, participants.* FROM `command`,user,participants WHERE participants.commad=command.id AND participants.user=user.id AND command.id=?;");
+    $getDetails->execute([$id]);
 } else {
 
     #Ici je specifie le lien lors qu'il s'agit de l'enregistrement

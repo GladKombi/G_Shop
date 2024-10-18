@@ -101,20 +101,20 @@ require_once('../models/select/select-Command.php');
                                                 <input type="number" autocomplete="off" min="1" id="feedback1" class="form-control" placeholder="E.g: 100" name="quantite">
                                             </div>
                                             <div class="form-actions d-flex justify-content-end">
-                                            <?php
-                                               if ($stockResta>0){
-                                                # Affichage du stock qui ne pas encore attribue
+                                                <?php
+                                                if ($stockResta > 0) {
+                                                    # Affichage du stock qui ne pas encore attribue
                                                 ?>
                                                     <button class="btn btn-info me-1"><b>La quantité non attribuer pour cette command est <em><?= $stockResta ?></em></b></button>
                                                     <button type="submit" class="btn btn-primary " name="save"><?= $btn ?></button>
                                                 <?php
-                                               } else{
-                                                # Quand il tout le stock viens d'etre attribuer
+                                                } else {
+                                                    # Quand il tout le stock viens d'etre attribuer
                                                 ?>
                                                     <a href="command.php?newCommand" class="btn btn-danger me-1">new Command</a>
                                                 <?php
-                                            }
-                                            ?>
+                                                }
+                                                ?>
 
                                             </div>
                                         </div>
@@ -151,27 +151,76 @@ require_once('../models/select/select-Command.php');
                         </div>
                         <div class="card-body">
                             <table class="table table-hover" id="table1">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>City</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Graiden</td>
-                                        <td>vehicula.aliquet@semconsequat.co.uk</td>
-                                        <td>076 4820 8838</td>
-                                        <td>Offenburg</td>
-                                        <td>
-                                            <span class="badge bg-success">Active</span>
-                                        </td>
-                                    </tr>
+                                <?php
+                                if (isset($_GET['idcom'])) {
+                                ?>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th>Participants</th>
+                                            <th>Quantity</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $n = 0;
+                                        while ($Details = $getDetails->fetch()) {
+                                            $n++;
+                                        ?>
+                                            <tr>
+                                                <td><?= $n ?></td>
+                                                <td><?= $Details["date"] ?></td>
+                                                <td><?= $Details["description"] ?></td>
+                                                <td><?= $Details["nom"] . " " . $Details["prenom"] ?></td>
+                                                <td><?= $Details["quantite"] ?> Pcs</td>
+                                                <td>
+                                                    <a href="command.php?idCommand=<?= $Details['id'] ?>" class="btn btn-primary btn-sm "><i class="bi bi-pencil-square"></i></a>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        }
+                                        ?>
+                                    </tbody>
+                                <?php
+                                } else {
+                                ?>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th>Quantity</th>
+                                            <th>Photo</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        $n = 0;
+                                        while ($Command = $getData->fetch()) {
+                                            $n++;
+                                        ?>
+                                            <tr>
+                                                <td><?= $n ?></td>
+                                                <td><?= $Command["date"] ?></td>
+                                                <td><?= $Command["description"] ?></td>
+                                                <td><?= $Command["quantite"] ?> Pcs</td>
+                                                <td><img src="../assets/photo/<?= $Command["photo"] ?>" width='50' height="50" style="object-fit: cover;"></td>
+                                                <td>
+                                                    <a href="Command-Details.php?ViewCommand=<?= $Command['id'] ?>" class="btn btn-primary btn-sm "><i class="bi bi-eye"></i></a>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        }
+                                        ?>
+                                    </tbody>
+                                <?php
+                                }
 
-                                </tbody>
+                                ?>
                             </table>
                         </div>
                     </div>
